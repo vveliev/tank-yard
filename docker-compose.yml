@@ -1,0 +1,69 @@
+version: '3'
+# This is for local dev deployments. It will not grab the latest docker
+# image for the django app from the docker repo. It will build and deploy the local
+# changes
+services:
+  influxdb:
+    build:
+        context: docker/influxdb
+        dockerfile: docker/influxdb/Dockerfile
+#    image: influxdb:latest
+#    container_name: influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    env_file:
+      - 'env.influxdb'
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/influxdb/data
+      - /srv/docker/influxdb/data:/var/lib/influxdb
+    networks:
+      - tank_yard
+
+  telegraf:
+#    image: telegraf:latest
+#    container_name: telegraf
+    build:
+        context: docker/telegraf
+        dockerfile: docker/telegraf/Dockerfile
+    networks:
+      - tank_yard
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+    build:
+        context: docker/influxdb
+        dockerfile: docker/influxdb/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - 'env.grafana'
+    networks:
+      - tank_yard
+
+  yandex-tank-api:
+    build:
+        context: docker/yandex-tank-api
+        dockerfile: docker/yandex-tank-api/Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - tank_yard
+
+  controlcenter:
+    build:
+        context:  docker/controlcenter
+        dockerfile: docker/controlcenter/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - django_app
+    tmpfs:
+      - /tld_service/var
+    networks:
+      - tank_yard
