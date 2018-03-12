@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM buildpack-deps:stretch-curl
 
 ARG DOWNLOAD_URL="https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana_latest_amd64.deb"
 

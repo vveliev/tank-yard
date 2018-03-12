@@ -50,6 +50,8 @@ services:
     build:
         context: docker/yandex-tank-api
         dockerfile: docker/yandex-tank-api/Dockerfile
+    depends_on:
+      - telegraf
     ports:
       - "8888:8888"
     networks:
@@ -62,7 +64,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - django_app
+      - yandex-tank-api
     tmpfs:
       - /tld_service/var
     networks:

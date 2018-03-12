@@ -1,4 +1,5 @@
-FROM ubuntu:trusty
+FROM buildpack-deps:stretch-curl
+
 MAINTAINER Alexey Lavrenuke <direvius@yandex-team.ru>
 
 ENV DEBIAN_FRONTEND noninteractive
