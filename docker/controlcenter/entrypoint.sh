@@ -1,0 +1,2 @@
+. /appenv/bin/activate
+exec $@

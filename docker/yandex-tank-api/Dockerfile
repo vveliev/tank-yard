@@ -4,14 +4,18 @@ MAINTAINER Alexey Lavrenuke <direvius@yandex-team.ru>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install -y -q --no-install-recommends python-software-properties software-properties-common && \
+RUN echo "deb http://deb.debian.org/debian jessie-backports main contrib non-free" > /etc/apt/sources.list.d/tucows.list; \
     add-apt-repository ppa:yandex-load/main -y && \
-    apt-get update && apt-get install -y -q phantom phantom-ssl && \
+    apt-get update && apt-get install -y --allow-unauthenticated -q phantom phantom-ssl python python-virtualenv && \
     mkdir /tank-api-workdir
 
-RUN apt-get install -y -q python-pip python-dev
 
-RUN pip install yandextank && pip install yandex-tank-api
+# Create virtual environment
+# Upgrade PIP in virtual environment to latest version
+RUN virtualenv /appenv && \
+    . /appenv/bin/activate && \
+    pip install pip --upgrade && \
+    pip install yandextank && pip install yandex-tank-api
 
 RUN echo "net.ipv4.tcp_max_tw_buckets=65536" >> /etc/sysctl.conf && \
     echo "net.ipv4.tcp_tw_recycle=1" >> /etc/sysctl.conf && \
@@ -29,10 +33,7 @@ RUN echo "net.ipv4.tcp_max_tw_buckets=65536" >> /etc/sysctl.conf && \
     echo "net.ipv4.tcp_low_latency=1" >> /etc/sysctl.conf && \
     echo "net.ipv4.tcp_syncookies=0" >> /etc/sysctl.conf
 
-COPY docker-entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
+COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 8888/tcp

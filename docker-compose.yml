@@ -6,7 +6,7 @@ services:
   influxdb:
     build:
         context: docker/influxdb
-        dockerfile: docker/influxdb/Dockerfile
+        dockerfile: Dockerfile
 #    image: influxdb:latest
 #    container_name: influxdb
     ports:
@@ -27,7 +27,7 @@ services:
 #    container_name: telegraf
     build:
         context: docker/telegraf
-        dockerfile: docker/telegraf/Dockerfile
+        dockerfile: Dockerfile
     networks:
       - tank_yard
     volumes:
@@ -38,7 +38,7 @@ services:
 #    container_name: grafana
     build:
         context: docker/influxdb
-        dockerfile: docker/influxdb/Dockerfile
+        dockerfile: Dockerfile
     ports:
       - "3000:3000"
     env_file:
@@ -49,7 +49,7 @@ services:
   yandex-tank-api:
     build:
         context: docker/yandex-tank-api
-        dockerfile: docker/yandex-tank-api/Dockerfile
+        dockerfile: Dockerfile
     depends_on:
       - telegraf
     ports:
@@ -60,7 +60,7 @@ services:
   controlcenter:
     build:
         context:  docker/controlcenter
-        dockerfile: docker/controlcenter/Dockerfile
+        dockerfile: Dockerfile
     ports:
       - "8080:80"
     depends_on:
@@ -69,3 +69,5 @@ services:
       - /tld_service/var
     networks:
       - tank_yard
+networks:
+  tank_yard:
