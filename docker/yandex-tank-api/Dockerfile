@@ -5,10 +5,10 @@ MAINTAINER Alexey Lavrenuke <direvius@yandex-team.ru>
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN echo "deb http://deb.debian.org/debian jessie-backports main contrib non-free" > /etc/apt/sources.list.d/tucows.list; \
+    apt-get update && apt-get install -y -q --no-install-recommends software-properties-common python-dev && \
     add-apt-repository ppa:yandex-load/main -y && \
-    apt-get update && apt-get install -y --allow-unauthenticated -q phantom phantom-ssl python python-virtualenv && \
+    apt-get update && apt-get install -y --allow-unauthenticated -q phantom phantom-ssl python gcc python-virtualenv && \
     mkdir /tank-api-workdir
-
 
 # Create virtual environment
 # Upgrade PIP in virtual environment to latest version

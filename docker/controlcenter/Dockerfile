@@ -3,7 +3,7 @@ FROM buildpack-deps:stretch-curl
 RUN apt-get update && \
     apt-get install -qy \
     -o APT::Install-Recommend=false -o APT::Install-Suggests=false \
-    python python-virtualenv libpython2.7 python-mysqldb
+    python gcc python-dev python-virtualenv libpython2.7 python-mysqldb
 
 
 # Create virtual environment
@@ -19,7 +19,7 @@ RUN virtualenv /controlcenter/venv && \
     pip install pip --upgrade && \
     pip install --upgrade setuptools  && \
     pip install uwsgi && \
-    pip install git+https://github.com/yandex/yandex-tank.git@master#egg=yandextank && \
+    pip install install yandextank && \
     pip install -r requirements.txt && \
 
 EXPOSE 80

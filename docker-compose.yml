@@ -57,17 +57,17 @@ services:
     networks:
       - tank_yard
 
-  controlcenter:
-    build:
-        context:  docker/controlcenter
-        dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    depends_on:
-      - yandex-tank-api
-    tmpfs:
-      - /tld_service/var
-    networks:
-      - tank_yard
+#  controlcenter:
+#    build:
+#        context:  docker/controlcenter
+#        dockerfile: Dockerfile
+#    ports:
+#      - "8080:80"
+#    depends_on:
+#      - yandex-tank-api
+#    tmpfs:
+#      - /tld_service/var
+#    networks:
+#      - tank_yard
 networks:
   tank_yard:
