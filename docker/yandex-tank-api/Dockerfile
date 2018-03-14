@@ -5,16 +5,14 @@ MAINTAINER Alexey Lavrenuke <direvius@yandex-team.ru>
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN echo "deb http://deb.debian.org/debian jessie-backports main contrib non-free" > /etc/apt/sources.list.d/tucows.list; \
-    apt-get update && apt-get install -y -q --no-install-recommends software-properties-common python-dev && \
+    apt-get update && apt-get install -y -q --no-install-recommends software-properties-common && \
     add-apt-repository ppa:yandex-load/main -y && \
-    apt-get update && apt-get install -y --allow-unauthenticated -q phantom phantom-ssl python gcc python-virtualenv && \
+    apt-get update && apt-get install -y --allow-unauthenticated -q phantom phantom-ssl python python-pip  && \
     mkdir /tank-api-workdir
 
 # Create virtual environment
 # Upgrade PIP in virtual environment to latest version
-RUN virtualenv /appenv && \
-    . /appenv/bin/activate && \
-    pip install pip --upgrade && \
+RUN pip install pip --upgrade && \
     pip install yandextank && pip install yandex-tank-api
 
 RUN echo "net.ipv4.tcp_max_tw_buckets=65536" >> /etc/sysctl.conf && \

@@ -41,6 +41,8 @@ services:
         dockerfile: Dockerfile
     ports:
       - "3000:3000"
+      - "8186:8086"
+      - "8188:8080"
     env_file:
       - 'env.grafana'
     networks:
