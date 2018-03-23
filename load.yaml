@@ -1,0 +1,28 @@
+phantom:
+  package: yandextank.plugins.Phantom
+  enabled: true
+  load_profile:
+    load_type: rps # schedule load by defining requests per second
+    schedule: const(1,10) line(10, 100, 10m) line(15, 15, 10m) line(20, 20, 10m) line(30, 30, 30m) # starting from 1rps growing linearly to 10rps during 10 minutes
+  address: app.host.name # [Target's address]:[target's port]
+  port: '10010'
+  headers:
+    - 'accept: application/json'
+    - 'content-type: application/json'
+  uris:
+    - /tld_service/ping
+autostop:
+  enabled: true
+  package: yandextank.plugins.Autostop
+  autostop:
+    - http(5xx,10%,5s)
+    - net(xx,10%,10s)
+telegraf:
+  enabled: true
+  package: yandextank.plugins.Telegraf
+influx:
+  package: yandextank.plugins.Influx
+  enabled: true
+  address: influxdb  # replace `--net host` with `--link influxdb:localhost` on mac
+  database: loadtest
+  chunk_size: 1000
