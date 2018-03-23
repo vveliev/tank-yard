@@ -1,1 +1,0 @@
-copy from docker official images , debian stretch-curl

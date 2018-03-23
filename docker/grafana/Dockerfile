@@ -1,21 +1,4 @@
-FROM buildpack-deps:stretch-curl
-
-ARG DOWNLOAD_URL="https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana_latest_amd64.deb"
-
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
-    apt-get clean && \
-    curl ${DOWNLOAD_URL} > /tmp/grafana.deb && \
-    dpkg -i /tmp/grafana.deb && \
-    rm /tmp/grafana.deb && \
-    curl -L https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 > /usr/sbin/gosu && \
-    chmod +x /usr/sbin/gosu && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
-
-EXPOSE 3000
-
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+FROM grafana/grafana:latest
+ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
+RUN mkdir -p $GF_PATHS_PLUGINS
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel

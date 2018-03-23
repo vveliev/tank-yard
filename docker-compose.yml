@@ -4,11 +4,8 @@ version: '3'
 # changes
 services:
   influxdb:
-    build:
-        context: docker/influxdb
-        dockerfile: Dockerfile
-#    image: influxdb:latest
-#    container_name: influxdb
+    image: influxdb:latest
+    container_name: influxdb
     ports:
       - "8083:8083"
       - "8086:8086"
@@ -23,22 +20,15 @@ services:
       - tank_yard
 
   telegraf:
-#    image: telegraf:latest
-#    container_name: telegraf
-    build:
-        context: docker/telegraf
-        dockerfile: Dockerfile
+    image: telegraf:latest
+    container_name: telegraf
     networks:
       - tank_yard
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
-
   grafana:
-#    image: grafana/grafana:latest
-#    container_name: grafana
-    build:
-        context: docker/influxdb
-        dockerfile: Dockerfile
+    image: grafana/grafana:latest
+    container_name: grafana
     ports:
       - "3000:3000"
       - "8186:8086"
@@ -47,13 +37,17 @@ services:
       - 'env.grafana'
     networks:
       - tank_yard
+    links:
+      - influxdb
 
-  yandex-tank-api:
+  yandex-tank:
     build:
-        context: docker/yandex-tank-api
-        dockerfile: Dockerfile
+      context:  docker/yandex-tank
+      dockerfile: Dockerfile
     depends_on:
       - telegraf
+    volumes:
+      - tank-app:/etc/yandex-tank
     ports:
       - "8888:8888"
     networks:
@@ -66,10 +60,12 @@ services:
 #    ports:
 #      - "8080:80"
 #    depends_on:
-#      - yandex-tank-api
+#      - yandex-tank
 #    tmpfs:
 #      - /tld_service/var
 #    networks:
 #      - tank_yard
 networks:
   tank_yard:
+volumes:
+  tank-app:
