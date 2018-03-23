@@ -1,7 +1,7 @@
 {
   "access": "proxy",
   "basicAuth": false,
-  "database": "mydb",
+  "database": "loadtest",
   "isDefault": true,
   "name": "influxdb",
   "password": "root",
