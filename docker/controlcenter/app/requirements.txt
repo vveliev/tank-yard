@@ -8,7 +8,7 @@ clickclick==1.2.2
 connexion==1.1.13
 cryptography==3.3.2
 cycler==0.10.0
-Flask==1.0
+Flask==2.3.2
 future==0.18.3
 idna==2.5
 inflection==0.3.1
